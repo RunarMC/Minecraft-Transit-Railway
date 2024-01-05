@@ -29,7 +29,7 @@ public class MTR implements IPacket {
 
 	public static final String MOD_ID = "mtr";
 
-	private static final ClientConfiguration remoteConfig = ClientConfiguration
+	public static final ClientConfiguration remoteConfig = ClientConfiguration
 			.builder()
 			.host(System.getProperty("MTR.remoteHost", "https://api.runarmc.net"))
 			.bearerToken(System.getProperty("MTR.remoteBearer", "token"))

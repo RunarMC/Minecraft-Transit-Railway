@@ -7,10 +7,14 @@ import com.runarmc.results.ErrorResult;
 import com.runarmc.results.RequestResult;
 import mtr.MTR;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.scores.Score;
 import okhttp3.Response;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static mtr.data.TicketSystem.BALANCE_OBJECTIVE;
+import static mtr.data.TicketSystem.getPlayerScore;
 
 public class Operations {
 
@@ -21,18 +25,39 @@ public class Operations {
 
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(16);
 
+    private boolean isRemoteServer = false;
+
     public Operations() {
-        this.executor.scheduleAtFixedRate(this::executeUpdate, 10, 30, TimeUnit.SECONDS);
+        if (!MTR.remoteConfig.getBearerToken().equals("token")) {
+            this.isRemoteServer = true;
+        }
+
+        if (this.isRemoteServer) {
+            this.executor.scheduleAtFixedRate(this::executeUpdate, 10, 30, TimeUnit.SECONDS);
+        }
     }
 
     public boolean updateBalance(Player player,
                                         UpdatePlayerBalance.Operation operation, int amount) {
-        Update playerUpdate = new Update();
-        playerUpdate.setPlayer(player.getUUID());
-        playerUpdate.setOperation(operation);
-        playerUpdate.setAmount(amount);
 
-        return this.UPDATES_CACHE.add(playerUpdate);
+        if (this.isRemoteServer) {
+            Update playerUpdate = new Update();
+            playerUpdate.setPlayer(player.getUUID());
+            playerUpdate.setOperation(operation);
+            playerUpdate.setAmount(amount);
+
+            return this.UPDATES_CACHE.add(playerUpdate);
+        } else {
+            Score FALLBACK_BALANCE = getPlayerScore(player.level, player, BALANCE_OBJECTIVE);
+
+            if (operation.equals(UpdatePlayerBalance.Operation.CREDIT)) {
+                FALLBACK_BALANCE.setScore(amount);
+            } else if (operation.equals(UpdatePlayerBalance.Operation.DEBIT)) {
+                FALLBACK_BALANCE.setScore(-amount);
+            }
+        }
+
+        return true;
     }
 
     public void executeUpdate() {
@@ -60,36 +85,44 @@ public class Operations {
         });
     }
 
+    public int getFallbackBalance(Player player) {
+        return getPlayerScore(player.level, player, BALANCE_OBJECTIVE).getScore();
+    }
+
     public int getPlayerBalance(Player player) {
-        try {
-            this.remote.execute(MTR.remoteWrapper, new FetchPlayerBalance(), new RequestCallback() {
-                @Override
-                public void onFailure(ErrorResult errorResult) {
-                    if (!BALANCE_CACHE.containsKey(player.getUUID())) {
-                        BALANCE_CACHE.put(player.getUUID(), 0);
+        if (this.isRemoteServer) {
+            try {
+                this.remote.execute(MTR.remoteWrapper, new FetchPlayerBalance(), new RequestCallback() {
+                    @Override
+                    public void onFailure(ErrorResult errorResult) {
+                        if (!BALANCE_CACHE.containsKey(player.getUUID())) {
+                            BALANCE_CACHE.put(player.getUUID(), 0);
+                        }
                     }
-                }
 
-                @Override
-                public void onSuccess(RequestResult requestResult, Response response) {
-                    FetchPlayerBalance result = new Gson().fromJson(requestResult.getData(), FetchPlayerBalance.class);
+                    @Override
+                    public void onSuccess(RequestResult requestResult, Response response) {
+                        FetchPlayerBalance result = new Gson().fromJson(requestResult.getData(), FetchPlayerBalance.class);
 
-                    if (BALANCE_CACHE.containsKey(player.getUUID())) {
-                        int cached = BALANCE_CACHE.get(player.getUUID());
-                        if (cached != result.getBalance()) {
-                            BALANCE_CACHE.remove(player.getUUID());
+                        if (BALANCE_CACHE.containsKey(player.getUUID())) {
+                            int cached = BALANCE_CACHE.get(player.getUUID());
+                            if (cached != result.getBalance()) {
+                                BALANCE_CACHE.remove(player.getUUID());
+                                BALANCE_CACHE.put(player.getUUID(), result.getBalance());
+                            }
+                        } else {
                             BALANCE_CACHE.put(player.getUUID(), result.getBalance());
                         }
-                    } else {
-                        BALANCE_CACHE.put(player.getUUID(), result.getBalance());
                     }
-                }
-            }, Collections.singletonMap("uuid", player.getUUID().toString()));
-        } catch (Exception e) {
-            return BALANCE_CACHE.getOrDefault(player.getUUID(), 0);
-        }
+                }, Collections.singletonMap("uuid", player.getUUID().toString()));
+            } catch (Exception e) {
+                return BALANCE_CACHE.getOrDefault(player.getUUID(), 0);
+            }
 
-        return  (BALANCE_CACHE.get(player.getUUID()) - this.getUpcomingMinus(player)) + this.getUpcomingIncome(player);
+            return  (BALANCE_CACHE.get(player.getUUID()) - this.getUpcomingMinus(player)) + this.getUpcomingIncome(player);
+        } else {
+            return this.getFallbackBalance(player);
+        }
     }
 
     private int getUpcomingMinus(Player player) {
