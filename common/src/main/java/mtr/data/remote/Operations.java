@@ -131,7 +131,7 @@ public class Operations {
         this.UPDATES_CACHE.forEach(context -> {
             if (context.getOperations().equals(UpdatePlayerBalance.Operation.DEBIT)) {
                 if (context.getPlayer().equals(player.getUUID())) {
-                    result.set(result.get() + context.getAmount());
+                    result.addAndGet(context.getAmount());
                 }
             }
         });
@@ -147,7 +147,7 @@ public class Operations {
         this.UPDATES_CACHE.forEach(context -> {
             if (context.getOperations().equals(UpdatePlayerBalance.Operation.CREDIT)) {
                 if (context.getPlayer().equals(player.getUUID())) {
-                    result.set(result.get() + context.getAmount());
+                    result.addAndGet(context.getAmount());
                 }
             }
         });
