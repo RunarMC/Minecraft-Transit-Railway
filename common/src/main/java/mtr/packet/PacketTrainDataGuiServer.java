@@ -1,10 +1,12 @@
 package mtr.packet;
 
 import io.netty.buffer.Unpooled;
+import mtr.Items;
 import mtr.Keys;
 import mtr.Registry;
 import mtr.block.*;
 import mtr.data.*;
+import mtr.data.remote.UpdatePlayerBalance;
 import mtr.mappings.BlockEntityMapper;
 import mtr.mappings.Utilities;
 import net.minecraft.core.BlockPos;
@@ -18,11 +20,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.scores.Score;
-
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -53,7 +52,7 @@ public class PacketTrainDataGuiServer extends PacketTrainDataBase {
 
 	public static void openTicketMachineScreenS2C(Level world, ServerPlayer player) {
 		final FriendlyByteBuf packet = new FriendlyByteBuf(Unpooled.buffer());
-		packet.writeInt(TicketSystem.getPlayerScore(world, player, TicketSystem.BALANCE_OBJECTIVE).getScore());
+		packet.writeInt(TicketSystem.getRemote().getPlayerBalance(player));
 		Registry.sendToPlayer(player, PACKET_OPEN_TICKET_MACHINE_SCREEN, packet);
 	}
 
@@ -358,11 +357,9 @@ public class PacketTrainDataGuiServer extends PacketTrainDataBase {
 		minecraftServer.execute(() -> {
 			final Level world = player.level;
 
-			TicketSystem.addObjectivesIfMissing(world);
-			Score balanceScore = TicketSystem.getPlayerScore(world, player, TicketSystem.BALANCE_OBJECTIVE);
-			balanceScore.setScore(balanceScore.getScore() + addAmount);
+			TicketSystem.getRemote().updateBalance(player, UpdatePlayerBalance.Operation.CREDIT, addAmount);
 
-			ContainerHelper.clearOrCountMatchingItems(Utilities.getInventory(player), itemStack -> itemStack.getItem() == Items.EMERALD, emeralds, false);
+			ContainerHelper.clearOrCountMatchingItems(Utilities.getInventory(player), itemStack -> itemStack.getItem() == Items.COIN_GOLD.get(), emeralds, false);
 			world.playSound(null, player.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.BLOCKS, 1, 1);
 		});
 	}

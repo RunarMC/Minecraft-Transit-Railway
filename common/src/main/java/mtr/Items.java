@@ -113,4 +113,5 @@ public interface Items {
 	RegistryObject<Item> TUNNEL_WALL_CREATOR_6_5 = new RegistryObject<>(() -> new ItemTunnelWallCreator(6, 5));
 	RegistryObject<Item> TUNNEL_WALL_CREATOR_6_7 = new RegistryObject<>(() -> new ItemTunnelWallCreator(6, 7));
 	RegistryObject<Item> TUNNEL_WALL_CREATOR_6_9 = new RegistryObject<>(() -> new ItemTunnelWallCreator(6, 9));
+	RegistryObject<Item> COIN_GOLD = new RegistryObject<>(() -> new ItemWithCreativeTabBase(CreativeModeTabs.CORE, properties -> properties.stacksTo(16)));
 }

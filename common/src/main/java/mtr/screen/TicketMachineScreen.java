@@ -1,6 +1,7 @@
 package mtr.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import mtr.Items;
 import mtr.client.IDrawing;
 import mtr.data.IGui;
 import mtr.mappings.ScreenMapper;
@@ -11,15 +12,15 @@ import mtr.packet.IPacket;
 import mtr.packet.PacketTrainDataGuiClient;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Items;
 
 public class TicketMachineScreen extends ScreenMapper implements IGui, IPacket {
 
 	private final Button[] buttons = new Button[BUTTON_COUNT];
+
 	private final Component balanceText;
 
-	private static final int EMERALD_TO_DOLLAR = 10;
-	private static final int BUTTON_COUNT = 10;
+	private static final int GOLD_COIN_AMOUNT = Integer.getInteger("MTR.ticketMachineCoinValue", 80);
+	private static final int BUTTON_COUNT = Integer.getInteger("MTR.ticketMachineMaxButtons", 10);
 	private static final int BUTTON_WIDTH = 80;
 
 	public TicketMachineScreen(int balance) {
@@ -53,7 +54,7 @@ public class TicketMachineScreen extends ScreenMapper implements IGui, IPacket {
 
 	@Override
 	public void tick() {
-		final int emeraldCount = getEmeraldCount();
+		final int emeraldCount = getCoinAmount();
 		for (int i = 0; i < BUTTON_COUNT; i++) {
 			buttons[i].active = emeraldCount >= Math.pow(2, i);
 		}
@@ -63,7 +64,7 @@ public class TicketMachineScreen extends ScreenMapper implements IGui, IPacket {
 	public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
 		try {
 			renderBackground(matrices);
-			final Component emeraldsText = Text.translatable("gui.mtr.emeralds", getEmeraldCount());
+			final Component emeraldsText = Text.translatable("gui.mtr.emeralds", getCoinAmount());
 			font.draw(matrices, balanceText, TEXT_PADDING, TEXT_PADDING, ARGB_WHITE);
 			font.draw(matrices, emeraldsText, width - TEXT_PADDING - font.width(emeraldsText), TEXT_PADDING, ARGB_WHITE);
 
@@ -82,15 +83,15 @@ public class TicketMachineScreen extends ScreenMapper implements IGui, IPacket {
 		return false;
 	}
 
-	private int getEmeraldCount() {
+	private int getCoinAmount() {
 		if (minecraft != null && minecraft.player != null) {
-			return Utilities.getInventory(minecraft.player).countItem(Items.EMERALD);
+			return Utilities.getInventory(minecraft.player).countItem(Items.COIN_GOLD.get());
 		} else {
 			return 0;
 		}
 	}
 
 	private static int getAddAmount(int index) {
-		return (int) Math.ceil(Math.pow(2, index) * (EMERALD_TO_DOLLAR + index));
+		return (int) Math.ceil(Math.pow(2, index) * (GOLD_COIN_AMOUNT + index));
 	}
 }

@@ -1,5 +1,7 @@
 package mtr;
 
+import com.runarmc.ClientConfiguration;
+import com.runarmc.ClientWrapper;
 import mtr.data.Depot;
 import mtr.data.RailwayData;
 import mtr.data.Route;
@@ -26,6 +28,16 @@ public class MTR implements IPacket {
 	private static int gameTick = 0;
 
 	public static final String MOD_ID = "mtr";
+
+	private static final ClientConfiguration remoteConfig = ClientConfiguration
+			.builder()
+			.host(System.getProperty("MTR.remoteHost", "https://api.runarmc.net"))
+			.bearerToken(System.getProperty("MTR.remoteBearer", "token"))
+			.useHttps(true)
+			.readTimeout(3000)
+			.connectTimeout(3000)
+			.build();
+	public static final ClientWrapper remoteWrapper = new ClientWrapper(remoteConfig);
 
 	public static void init(
 			BiConsumer<String, RegistryObject<Item>> registerItem,
@@ -175,6 +187,13 @@ public class MTR implements IPacket {
 			registerItem.accept("tunnel_wall_creator_6_5", Items.TUNNEL_WALL_CREATOR_6_5);
 			registerItem.accept("tunnel_wall_creator_6_7", Items.TUNNEL_WALL_CREATOR_6_7);
 			registerItem.accept("tunnel_wall_creator_6_9", Items.TUNNEL_WALL_CREATOR_6_9);
+
+			// RunarMC CHANGES
+
+			registerItem.accept("gold_coin", Items.COIN_GOLD);
+
+			// RunarMC End
+
 			registerItem.accept("boat_node", Items.BOAT_NODE);
 
 			registerBlockItem.accept("rail", Blocks.RAIL_NODE, CreativeModeTabs.CORE);

@@ -59,7 +59,8 @@ public abstract class Webserver {
 	}
 
 	public static void start(Path path) {
-		int port = 8888;
+		// Quick configuration on startup
+		int port = Integer.getInteger("MTR.websitePort", 8888);
 		try {
 			port = Mth.clamp(Integer.parseInt(String.join("", Files.readAllLines(path)).replaceAll("\\D", "")), 1025, 65535);
 		} catch (Exception ignored) {
@@ -69,6 +70,9 @@ public abstract class Webserver {
 				e.printStackTrace();
 			}
 		}
+
+		System.out.println("[MTR] Web service is running on 0.0.0.0:" + port);
+
 		serverConnector.setPort(port);
 		try {
 			webServer.start();

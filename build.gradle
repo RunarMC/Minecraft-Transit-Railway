@@ -48,6 +48,12 @@ subprojects {
 		shadowCommon
 	}
 
+	repositories {
+		maven {
+			url = "https://maven.runarmc.net/public/"
+		}
+	}
+
 	dependencies {
 		minecraft "com.mojang:minecraft:${minecraft_version}"
 		mappings loom.layered() {
@@ -68,6 +74,12 @@ subprojects {
 		implementation "org.msgpack:msgpack-core:${rootProject.messagepack_version}"
 		implementation "com.hierynomus:sshj:${rootProject.sshj_version}"
 		implementation "com.github.jonafanho:Minecraft-Mod-API-Tools:${minecraft_mod_api_tools_version}"
+
+		implementation "net.runarmc:wrapper:1.0.3"
+		implementation("com.squareup.okhttp3:okhttp:4.9.1")
+		shadowCommon "net.runarmc:wrapper:1.0.3"
+		shadowCommon("com.squareup.okhttp3:okhttp:4.9.1")
+
 		shadowCommon "org.eclipse.jetty:jetty-http:${rootProject.jetty_version}"
 		shadowCommon "org.eclipse.jetty:jetty-io:${rootProject.jetty_version}"
 		shadowCommon "org.eclipse.jetty:jetty-security:${rootProject.jetty_version}"
