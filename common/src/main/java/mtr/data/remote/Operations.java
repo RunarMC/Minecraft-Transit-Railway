@@ -51,9 +51,9 @@ public class Operations {
             Score FALLBACK_BALANCE = getPlayerScore(player.level, player, BALANCE_OBJECTIVE);
 
             if (operation.equals(UpdatePlayerBalance.Operation.CREDIT)) {
-                FALLBACK_BALANCE.setScore(amount);
+                FALLBACK_BALANCE.add(amount);
             } else if (operation.equals(UpdatePlayerBalance.Operation.DEBIT)) {
-                FALLBACK_BALANCE.setScore(-amount);
+                FALLBACK_BALANCE.add(-amount);
             }
         }
 
@@ -85,11 +85,11 @@ public class Operations {
         });
     }
 
-    public int getFallbackBalance(Player player) {
+    public synchronized int getFallbackBalance(Player player) {
         return getPlayerScore(player.level, player, BALANCE_OBJECTIVE).getScore();
     }
 
-    public int getPlayerBalance(Player player) {
+    public synchronized int getPlayerBalance(Player player) {
         if (this.isRemoteServer) {
             try {
                 this.remote.execute(MTR.remoteWrapper, new FetchPlayerBalance(), new RequestCallback() {
@@ -136,6 +136,8 @@ public class Operations {
             }
         });
 
+        System.out.println("DEBUG: Upcoming sync for outcome ( " + player.getUUID() + " : - " + result.get());
+
         return result.get();
     }
 
@@ -149,6 +151,8 @@ public class Operations {
                 }
             }
         });
+
+        System.out.println("DEBUG: Upcoming sync for income ( " + player.getUUID() + " : + " + result.get());
 
         return result.get();
     }
