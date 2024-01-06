@@ -6,7 +6,7 @@ import mtr.Keys;
 import mtr.Registry;
 import mtr.block.*;
 import mtr.data.*;
-import mtr.data.remote.UpdatePlayerBalance;
+import mtr.data.remote.balance.database.UpdatePlayerBalance;
 import mtr.mappings.BlockEntityMapper;
 import mtr.mappings.Utilities;
 import net.minecraft.core.BlockPos;

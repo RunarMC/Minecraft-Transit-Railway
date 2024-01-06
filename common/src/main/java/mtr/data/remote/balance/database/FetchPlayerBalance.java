@@ -1,4 +1,4 @@
-package mtr.data.remote;
+package mtr.data.remote.balance.database;
 
 import com.runarmc.annotations.Route;
 import com.runarmc.models.AbstractModel;

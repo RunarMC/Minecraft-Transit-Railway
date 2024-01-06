@@ -2,6 +2,7 @@ package mtr;
 
 import com.runarmc.ClientConfiguration;
 import com.runarmc.ClientWrapper;
+import com.runarmc.handler.RequestHandler;
 import mtr.data.Depot;
 import mtr.data.RailwayData;
 import mtr.data.Route;
@@ -21,6 +22,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.BiConsumer;
 
 public class MTR implements IPacket {
@@ -39,6 +42,12 @@ public class MTR implements IPacket {
 			.build();
 	public static final ClientWrapper remoteWrapper = new ClientWrapper(remoteConfig);
 
+	public static final RequestHandler remote = new RequestHandler();
+
+	public static final ScheduledExecutorService executor = Executors.newScheduledThreadPool(16);
+
+	public static boolean isRemoteServer = false;
+
 	public static void init(
 			BiConsumer<String, RegistryObject<Item>> registerItem,
 			BiConsumer<String, RegistryObject<Block>> registerBlock,
@@ -48,6 +57,10 @@ public class MTR implements IPacket {
 			BiConsumer<String, RegistryObject<? extends EntityType<? extends Entity>>> registerEntityType,
 			BiConsumer<String, SoundEvent> registerSoundEvent
 	) {
+		if (!remoteConfig.getBearerToken().equals("token")) {
+			isRemoteServer = true;
+		}
+
 		registerItem.accept("brush", Items.BRUSH);
 		registerItem.accept("escalator", Items.ESCALATOR);
 		registerItem.accept("lift_buttons_link_connector", Items.LIFT_BUTTONS_LINK_CONNECTOR);

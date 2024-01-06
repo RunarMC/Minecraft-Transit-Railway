@@ -1,7 +1,7 @@
 package mtr.data;
 
-import mtr.data.remote.Operations;
-import mtr.data.remote.UpdatePlayerBalance;
+import mtr.data.remote.balance.Operations;
+import mtr.data.remote.balance.database.UpdatePlayerBalance;
 import mtr.mappings.Text;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -37,7 +37,6 @@ public class TicketSystem {
 
 		addObjectivesIfMissing(world);
 
-		final int balanceScore = remote.getPlayerBalance(player);
 		final Score entryZoneScore = getPlayerScore(world, player, ENTRY_ZONE_OBJECTIVE);
 
 		final boolean isEntering;
@@ -49,9 +48,9 @@ public class TicketSystem {
 
 		final boolean canOpen;
 		if (isEntering) {
-			canOpen = onEnter(station, player, balanceScore, entryZoneScore, remindIfNoRecord);
+			canOpen = onEnter(station, player, entryZoneScore, remindIfNoRecord);
 		} else {
-			canOpen = onExit(station, player, balanceScore, entryZoneScore, remindIfNoRecord);
+			canOpen = onExit(station, player, entryZoneScore, remindIfNoRecord);
 		}
 
 		if (canOpen) {
@@ -78,7 +77,7 @@ public class TicketSystem {
 		return world.getScoreboard().getOrCreatePlayerScore(player.getGameProfile().getName(), world.getScoreboard().getObjective(objectiveName));
 	}
 
-	private static boolean onEnter(Station station, Player player, int balanceScore, Score entryZoneScore, boolean remindIfNoRecord) {
+	private static boolean onEnter(Station station, Player player, Score entryZoneScore, boolean remindIfNoRecord) {
 		final int entryZone = entryZoneScore.getScore();
 
 		if (entryZone != 0) {
@@ -93,17 +92,17 @@ public class TicketSystem {
 			}
 		}
 
-		if (balanceScore >= 0) {
+		if (remote.getPlayerBalance(player) > 0) {
 			entryZoneScore.setScore(encodeZone(station.zone));
-			player.displayClientMessage(Text.translatable("gui.mtr.enter_barrier", String.format("%s (%s)", station.name.replace('|', ' '), station.zone), balanceScore), true);
+			player.displayClientMessage(Text.translatable("gui.mtr.enter_barrier", String.format("%s (%s)", station.name.replace('|', ' '), station.zone), remote.getPlayerBalance(player)), true);
 			return true;
 		} else {
-			player.displayClientMessage(Text.translatable("gui.mtr.insufficient_balance", balanceScore), true);
+			player.displayClientMessage(Text.translatable("gui.mtr.insufficient_balance", remote.getPlayerBalance(player)), true);
 			return false;
 		}
 	}
 
-	private static boolean onExit(Station station, Player player, int balanceScore, Score entryZoneScore, boolean remindIfNoRecord) {
+	private static boolean onExit(Station station, Player player, Score entryZoneScore, boolean remindIfNoRecord) {
 		final int entryZone = entryZoneScore.getScore();
 		final int fare = BASE_FARE + ZONE_FARE * Math.abs(station.zone - decodeZone(entryZone));
 		final int finalFare = entryZone != 0 ? isConcessionary(player) ? (int) Math.ceil(fare / 2F) : fare : EVASION_FINE;
@@ -117,7 +116,7 @@ public class TicketSystem {
 				player.displayClientMessage(new TextComponent("We're sorry but we cannot DEBIT your remote balance.").withStyle(ChatFormatting.RED), true);
 				return false;
 			}
-			player.displayClientMessage(Text.translatable("gui.mtr.exit_barrier", String.format("%s (%s)", station.name.replace('|', ' '), station.zone), finalFare, balanceScore), true);
+			player.displayClientMessage(Text.translatable("gui.mtr.exit_barrier", String.format("%s (%s)", station.name.replace('|', ' '), station.zone), finalFare, remote.getPlayerBalance(player)), true);
 			return true;
 		}
 	}

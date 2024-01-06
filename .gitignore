@@ -53,3 +53,5 @@ fabric/server
 forge/server
 
 .architectury-transformer/
+
+gradle.properties
