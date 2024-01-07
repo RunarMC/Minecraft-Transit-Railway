@@ -3,7 +3,7 @@
 		"sounds": [
 			{
 				"name": "mtr:ticket_barrier",
-				"pitch": 0.5
+				"pitch": 2
 			}
 		]
 	},
@@ -11,7 +11,7 @@
 		"sounds": [
 			{
 				"name": "mtr:ticket_barrier_concessionary",
-				"pitch": 0.5
+				"pitch": 2
 			}
 		]
 	},
@@ -19,7 +19,7 @@
 		"sounds": [
 			{
 				"name": "mtr:ticket_processor_entry",
-				"pitch": 0.5
+				"pitch": 2
 			}
 		]
 	},
@@ -27,7 +27,7 @@
 		"sounds": [
 			{
 				"name": "mtr:ticket_processor_entry_concessionary",
-				"pitch": 0.5
+				"pitch": 2
 			}
 		]
 	},
@@ -35,7 +35,7 @@
 		"sounds": [
 			{
 				"name": "mtr:ticket_processor_exit",
-				"pitch": 0.5
+				"pitch": 2
 			}
 		]
 	},
@@ -43,7 +43,7 @@
 		"sounds": [
 			{
 				"name": "mtr:ticket_processor_exit_concessionary",
-				"pitch": 0.5
+				"pitch": 2
 			}
 		]
 	},
@@ -51,7 +51,7 @@
 		"sounds": [
 			{
 				"name": "mtr:pid_line_a",
-				"pitch": 0.5
+				"pitch": 2
 			}
 		]
 	},
@@ -59,7 +59,7 @@
 		"sounds": [
 			{
 				"name": "mtr:pid_line_b",
-				"pitch": 0.5
+				"pitch": 2
 			}
 		]
 	},
@@ -67,6 +67,118 @@
 		"sounds": [
 			{
 				"name": "mtr:ticket_processor_fail",
+				"pitch": 2
+			}
+		]
+	},
+	"saint_fox_square_terminus_cz": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/saint_fox_square_terminus_cz",
+				"pitch": 0.5
+			}
+		]
+	},
+	"saint_fox_square_terminus_en": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/saint_fox_square_terminus_en",
+				"pitch": 0.5
+			}
+		]
+	},
+	"slums_door_cz": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/slums_door_cz",
+				"pitch": 0.5
+			}
+		]
+	},
+	"slums_door_en": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/slums_door_en",
+				"pitch": 0.5
+			}
+		]
+	},
+	"train_to_saint_fox_square_cz": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/train_to_saint_fox_square_cz",
+				"pitch": 0.5
+			}
+		]
+	},
+	"train_to_saint_fox_square_en": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/train_to_saint_fox_square_en",
+				"pitch": 0.5
+			}
+		]
+	},
+	"train_to_slums_cz": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/train_to_slums_cz",
+				"pitch": 0.5
+			}
+		]
+	},
+	"train_to_slums_en": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/train_to_slums_en",
+				"pitch": 0.5
+			}
+		]
+	},
+	"warning_cz": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/warning_cz",
+				"pitch": 0.5
+			}
+		]
+	},
+	"warning_en": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/warning_en",
+				"pitch": 0.5
+			}
+		]
+	},
+	"side_gate_cz": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/side_gate_cz",
+				"pitch": 0.5
+			}
+		]
+	},
+	"side_gate_en": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/side_gate_en",
+				"pitch": 0.5
+			}
+		]
+	},
+	"train_to_spawn_cz": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/train_to_spawn_cz",
+				"pitch": 0.5
+			}
+		]
+	},
+	"train_to_spawn_en": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/train_to_spawn_en",
 				"pitch": 0.5
 			}
 		]
