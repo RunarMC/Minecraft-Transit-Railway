@@ -1,18 +1,24 @@
 package mtr.data;
 
+import mtr.Items;
 import mtr.data.remote.balance.Operations;
 import mtr.data.remote.balance.database.UpdatePlayerBalance;
 import mtr.mappings.Text;
+import mtr.mappings.Utilities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.scores.Score;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class TicketSystem {
 
@@ -112,10 +118,18 @@ public class TicketSystem {
 			return false;
 		} else {
 			entryZoneScore.setScore(0);
-			if (!remote.updateBalance(player, UpdatePlayerBalance.Operation.DEBIT, finalFare)) {
-				player.displayClientMessage(new TextComponent("We're sorry but we cannot DEBIT your remote balance.").withStyle(ChatFormatting.RED), true);
-				return false;
+
+			int tickets = Utilities.getInventory(player).countItem(Items.TICKET.get());
+
+			if (tickets >= 1) {
+				ContainerHelper.clearOrCountMatchingItems(Utilities.getInventory(player), itemStack -> itemStack.getItem() == Items.TICKET.get(), 1, false);
+				return true;
+			} else {
+				if (!remote.updateBalance(player, UpdatePlayerBalance.Operation.DEBIT, finalFare)) {
+					player.displayClientMessage(new TextComponent("We're sorry but we cannot DEBIT your remote balance.").withStyle(ChatFormatting.RED), true);
+				}
 			}
+
 			player.displayClientMessage(Text.translatable("gui.mtr.exit_barrier", String.format("%s (%s)", station.name.replace('|', ' '), station.zone), finalFare, remote.getPlayerBalance(player)), true);
 			return true;
 		}

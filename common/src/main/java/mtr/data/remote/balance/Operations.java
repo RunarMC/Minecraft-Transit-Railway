@@ -79,12 +79,7 @@ public class Operations {
                 // As the server keep 4 as fee.
 
                 if (result.getFirst()) {
-                    if (result.getSecond().name.startsWith("kingdom_")
-                            && result.getSecond().name.endsWith("_station")) {
-                        update.setKingdomId(result.getSecond().getAreaId());
-                    } else {
-                        update.setKingdomId("none");
-                    }
+                    update.setKingdomId(result.getSecond().getAreaId());
                 } else {
                     update.setKingdomId("none");
                 }
@@ -172,12 +167,21 @@ public class Operations {
             balance.set(balance.get() + credit.get());
 
             if (player.getName().equals(new TextComponent("Vakea"))) {
+                QueuedObject<Boolean, Zone> result = this.areaManager.getPlayerCurrentZone(player);
+
                 System.out.println("---------- DEBUG ----------");
                 System.out.println(" -> Normal : " + BALANCE_CACHE.get(player.getUUID()));
                 System.out.println(" -> Incoming debit : " + debit.get());
                 System.out.println(" -> Incoming credit : " + credit.get());
                 System.out.println("   -> Predicated : " + balance.get());
                 System.out.println("   -> Player : " + player.getName().toString());
+                if (result.getFirst()) {
+                    System.out.println(" -> From Zone ");
+                    System.out.println("   -> Zone Id : " + result.getSecond().getAreaId());
+                    System.out.println("   -> Zone Name : " + result.getSecond().name);
+                } else {
+                    System.out.println(" !! Not inside a zone !! ");
+                }
                 System.out.println("---------- DEBUG ----------");
             }
 

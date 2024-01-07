@@ -204,6 +204,7 @@ public class MTR implements IPacket {
 			// RunarMC CHANGES
 
 			registerItem.accept("gold_coin", Items.COIN_GOLD);
+			registerItem.accept("ticket", Items.TICKET);
 
 			// RunarMC End
 
