@@ -13,4 +13,6 @@ public interface SoundEvents {
 	SoundEvent TICKET_PROCESSOR_EXIT = RegistryUtilities.createSoundEvent(new ResourceLocation(MTR.MOD_ID, "ticket_processor_exit"));
 	SoundEvent TICKET_PROCESSOR_EXIT_CONCESSIONARY = RegistryUtilities.createSoundEvent(new ResourceLocation(MTR.MOD_ID, "ticket_processor_exit_concessionary"));
 	SoundEvent TICKET_PROCESSOR_FAIL = RegistryUtilities.createSoundEvent(new ResourceLocation(MTR.MOD_ID, "ticket_processor_fail"));
+	SoundEvent PID_LINE_A = RegistryUtilities.createSoundEvent(new ResourceLocation(MTR.MOD_ID, "pid_line_a"));
+	SoundEvent PID_LINE_B = RegistryUtilities.createSoundEvent(new ResourceLocation(MTR.MOD_ID, "pid_line_b"));
 }

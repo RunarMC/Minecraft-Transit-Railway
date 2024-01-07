@@ -47,6 +47,22 @@
 			}
 		]
 	},
+	"pid_line_a": {
+		"sounds": [
+			{
+				"name": "mtr:pid_line_a",
+				"pitch": 0.5
+			}
+		]
+	},
+	"pid_line_b": {
+		"sounds": [
+			{
+				"name": "mtr:pid_line_b",
+				"pitch": 0.5
+			}
+		]
+	},
 	"ticket_processor_fail": {
 		"sounds": [
 			{
