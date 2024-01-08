@@ -183,6 +183,62 @@
 			}
 		]
 	},
+	"spawn_door_cz": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/spawn_door_cz",
+				"pitch": 0.5
+			}
+		]
+	},
+	"spawn_door_en": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/spawn_door_en",
+				"pitch": 0.5
+			}
+		]
+	},
+	"side_gate_terminus_cz": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/side_gate_terminus_cz",
+				"pitch": 0.5
+			}
+		]
+	},
+	"side_gate_terminus_en": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/side_gate_terminus_en",
+				"pitch": 0.5
+			}
+		]
+	},
+	"side_gate_to_spawn_cz": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/side_gate_to_spawn_cz",
+				"pitch": 0.5
+			}
+		]
+	},
+	"train_to_side_gate_cz": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/train_to_side_gate_cz",
+				"pitch": 0.5
+			}
+		]
+	},
+	"train_to_side_gate_en": {
+		"sounds": [
+			{
+				"name": "mtr:pid_announcements/train_to_side_gate_en",
+				"pitch": 0.5
+			}
+		]
+	},
 	"tactile_map_music": {
 		"sounds": [
 			{

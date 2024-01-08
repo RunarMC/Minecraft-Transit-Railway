@@ -168,7 +168,14 @@ public class PacketTrainDataGuiClient extends PacketTrainDataBase {
 			final ClientLevel world = minecraftClient.level;
 			final LocalPlayer player = minecraftClient.player;
 			if (!soundIdString.isEmpty() && world != null && player != null) {
-				world.playLocalSound(player.blockPosition(), RegistryUtilities.createSoundEvent(new ResourceLocation(soundIdString)), SoundSource.BLOCKS, 1000000, 2, false);
+
+				String localCode = "_cz";
+				String soundId = soundIdString;
+				if (minecraftClient.options.languageCode.equals("en_us")) {
+					soundId = soundIdString.replace(localCode, "_en");
+				}
+
+				world.playLocalSound(player.blockPosition(), RegistryUtilities.createSoundEvent(new ResourceLocation(soundId)), SoundSource.BLOCKS, 1000000, 2, false);
 			}
 		});
 	}
